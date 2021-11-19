@@ -1,0 +1,9 @@
+__pycache__
+users.sqlite3
+.cache
+venv
+secret.py
+static/document
+static/img
+static/node_modules
+static/npm

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{#
+    Get the content for a category based on the passed ID 
+    @param id
+#}
+{% block title %}{{category.name}} | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/category.css')}}">
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-12">
+            <h3>{{category.name}}</h3>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        {% for project in projects: %}
+        <!-- Single Item of 4 -->
+        <div class="col-lg-3 col-md-3 col-sm-6 col-6 display-flex py-10">
+            <div class="project-box m-1">
+                <a href="/{{category._id}}/{{project._id}}">
+                <img src="{{url_for('static', filename='img/'+project.cover_img)}}" alt="Picture of {{project.name}}" class="img-fluid">
+                <h4 class="text-center project-title">{{project.name}}<br><span class=""></h4><p class="text-center"></a><span class="text-muted"><i class="bi bi-clock"></i> {{project.date_made.strftime("%B %d, %Y")}}</span><br>
+                    <a class="read-more" href="/{{category._id}}/{{project._id}}">Read More >></a><span></p>
+                </form>
+            </div>
+        </div>
+        <!-- End of single item -->
+        {% endfor %}
+    </div>
+</div> 
+{% endblock %}

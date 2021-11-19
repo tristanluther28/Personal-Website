@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}Smith Chart Helper | Tristan's Workshop{% endblock %}
+{% block content %}
+{% block auxcss %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css">
+{% endblock %}
+<div class="container pt">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1>Smith Chart for Impedance Matching</h1>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <h3>Why impedance match?</h3>
+            <p>
+                <ul>
+                    <li>Guarentee Maximum Power Delivered</li>
+                    <li>Improve Signal-to-Noise Ratio (SNR)</li>
+                    <li>Reduce amplitude and phase errors</li>
+                    <li>Consider design limitations</li>
+                </ul>
+            </p>
+        </div>
+        <div class="col-lg-4">
+            <h3>How do we impedance match?</h3>
+            <p>
+                <ol>
+                    <li>Normalize the load impedance $$z_L = \frac{Z_L}{Z_0}$$</li>
+                </ol>
+            </p>
+        </div>
+        <div class="col-lg-4">
+            <h3>How do I find my input characteristics?</h3>
+        </div>
+    </div>
+    <form class="row g-3">
+        <div class="col-md-6">
+            <label for="freq" class="form-label">Frequency (MHz)</label>
+            <input type="number" class="form-control" name="freq" id="freq">
+        </div>
+        <div class="col-md-6">
+            <label for="src_impedance" class="form-label">Line Impedance Z<sub>0</sub> (&Omega;)</label>
+            <input type="number" class="form-control" name="src_impedance" id="src_impedance">
+        </div>
+        <div class="col-md-6">
+            <label for="load_real" class="form-label">Load Impedance Z<sub>L</sub> &real;</label>
+            <input type="number" class="form-control" name="load_real" id="load_real">
+        </div>
+        <div class="col-md-6">
+            <label for="load_imag" class="form-label">+ j&image; (&Omega;)</label>
+            <input type="number" class="form-control" name="load_imag" id="load_imag">
+        </div>
+        <div class="col-12">
+            <button type="button" onclick="calculateMatch()" class="btn btn-success">Calculate</button>
+        </div>
+        </form>
+    <div class="row">
+        <canvas id="smith-chart" style="display: block; width: 710px; height: 355px;" width="710" height="355" class="chartjs-render-monitor"></canvas>
+    </div>
+</div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML' async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script src="static/node_modules/chartjs-chart-smith/dist/chartjs-chart-smith.js"></script>
+    <script>
+    var normal_impedance_real = 0.0;
+    var normal_impedance_imag = 0.0;
+    var matching_impedance_real = 0.0;
+    var matching_impedance_imag = 0.0; 
+    var matching_addmitance_real = 0.0;
+    var matching_addmitance_imag = 0.0;
+
+    const ctx = document.getElementById('smith-chart').getContext('2d');
+    const cfg = {
+    type: 'smith',
+    options: {
+        aspectRatio: 1,
+        elements: {
+        point: {
+            pointStyle: 'cross',
+            radius: 10,
+            hoverRadius: 10,
+            borderColor: 'black'
+        }
+        }
+    },
+    data: {
+        datasets: [{
+            backgroundColor: 'rgba(0, 255, 0, 0.1)',
+            borderColor: 'rgb(0, 255, 0)',
+            label: '1. Normalized Impedance',
+            data: [
+            ],
+        },
+        {
+            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+            borderColor: 'rgb(255, 0, 0)',
+            label: '2. Matching Impedance',
+            data: [
+            ],
+        },
+        {
+            backgroundColor: 'rgba(0, 0, 255, 0.1)',
+            borderColor: 'rgb(0, 0, 255)',
+            label: '3. Matching Attmitance',
+            data: [
+            ],
+        },
+        ]
+    }
+    };
+    var chart = new Chart(ctx, cfg);
+
+    function calculateMatch(){
+        //Remove current chart data
+        chart.data.datasets.forEach((dataset) => {
+            dataset.data.pop();
+        });
+        chart.update();
+
+        var frequency = document.getElementById("freq").value;
+        var line_impedance = document.getElementById("src_impedance").value;
+        var load_real = document.getElementById("load_real").value;
+        var load_imag = document.getElementById("load_imag").value;
+
+        normal_impedance_real = load_real/line_impedance;
+        normal_impedance_imag = load_imag/line_impedance;
+        //If the real component is greater than 1 we need to move along the admittance circle
+        if(normal_impedance_real > 1){
+            matching_impedance_real = 1;
+            matching_impedance_imag = normal_impedance_imag;
+            matching_addmitance_real = 1/matching_impedance_real;
+            matching_addmitance_imag = 1/matching_impedance_imag;
+        }
+        else{
+            //Otherwise we need to move along the 
+        }
+
+        //Add new chart data
+        chart.data.datasets[0].data.push({ real : normal_impedance_real, imag : normal_impedance_imag});
+        chart.data.datasets[1].data.push({ real : matching_impedance_real, imag : matching_impedance_imag});
+        chart.data.datasets[2].data.push({ real : matching_addmitance_real, imag : matching_addmitance_imag});
+        chart.update();
+        console.log(normal_impedance_real + " + j" + normal_impedance_imag);
+        console.log(matching_impedance_real + " + j" + matching_impedance_imag);
+    }
+    </script>
+{% endblock %}

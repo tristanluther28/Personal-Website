@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}Edit {{project.name}} | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<!-- Cover Image Background with center title -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% if msg and not msg == "": %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi flex-shrink-0 me-2 bi-check-circle-fill" width="24" height="24" role="img" aria-label="Success:"></i>
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-8">
+            <h3>Edit Project "{{project.name}}"</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Project Name</label>
+                    <input type="text" class="form-control" id="name" name="name" aria-describedby="name" value="{{project.name}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="content_md" class="form-label">Content Markdown</label>
+                    <textarea class="form-control" placeholder="Put plain HTML here" rows="10" name="content_md" id="content_md" required>{{project.content_md}}</textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="category_id" class="form-label">Category</label>
+                    <select class="form-select" name="category_id" aria-label="category_id">
+                        {% for category in categories %}
+                            {% if project.category_id == category._id: %}
+                        <option value="{{category._id}}" selected>{{category.name}}</option>
+                            {% else: %}
+                        <option value="{{category._id}}">{{category.name}}</option>
+                            {% endif %}
+                        {% endfor %}
+                      </select>
+                </div>
+                <div class="mb-3">
+                    <label for="cover_img" class="form-label">Cover Image URL</label>
+                    <input type="text" class="form-control" id="cover_img" name="cover_img" aria-describedby="cover_img" value="{{project.cover_img}}">
+                </div>
+                <div class="mb-3">
+                    <label for="github_link" class="form-label">GitHub Link (Optional)</label>
+                    {% if project.github_link: %}
+                    <input type="text" class="form-control" id="github_link" name="github_link" aria-describedby="github_link" value="{{project.github_link}}">
+                    {% else: %}
+                    <input type="text" class="form-control" id="github_link" name="github_link" aria-describedby="github_link">
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="model_link" class="form-label">3D Model Link (Optional)</label>
+                    {% if project.model_link: %}
+                    <input type="text" class="form-control" id="model_link" name="model_link" aria-describedby="model_link" value="{{project.model_link}}">
+                    {% else: %}
+                    <input type="text" class="form-control" id="model_link" name="model_link" aria-describedby="model_link">
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    <label for="date_made" class="form-label">Date Made</label>
+                    <input type="date" class="form-control" id="date_made" name="date_made" aria-describedby="date_made" value="{{date_made}}">
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary">Update</button>
+            </form>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+    <div class="row">
+        
+    </div>
+</div> 
+{% endblock %}

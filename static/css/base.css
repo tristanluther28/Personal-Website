@@ -1,0 +1,85 @@
+.bg-gray-100{
+    background-color: #f8f9fa;
+}
+.bg-gray-200{
+    background-color: #e9ecef;
+}
+.bg-gray-300{
+    background-color: #dee2e6;
+}
+.bg-gray-400{
+    background-color: #ced4da;
+}
+.bg-gray-500{
+    background-color: #adb5bd;
+}
+.bg-gray-600{
+    background-color: #6c757d;
+}
+.bg-gray-700{
+    background-color: #495057;
+}
+.bg-gray-800{
+    background-color: #343a40;
+}
+.bg-gray-900{
+    background-color: #212529;
+}
+
+.project-box{
+    border: 1px solid #888;
+    border-radius: 5px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.fade-in {
+    animation: fadeIn ease 10s;
+    -webkit-animation: fadeIn ease 10s;
+    -moz-animation: fadeIn ease 10s;
+    -o-animation: fadeIn ease 10s;
+    -ms-animation: fadeIn ease 10s;
+  }
+  @keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-moz-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-o-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+    }
+  }
+  
+  @-ms-keyframes fadeIn {
+    0% {
+      opacity:0;
+    }
+    100% {
+      opacity:1;
+  }

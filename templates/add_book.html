@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}Add a Book | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<!-- Cover Image Background with center title -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% if msg and not msg == "": %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi flex-shrink-0 me-2 bi-check-circle-fill" width="24" height="24" role="img" aria-label="Success:"></i>
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-8">
+            <h3>Add Book</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" aria-describedby="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author</label>
+                    <input type="text" class="form-control" id="author" name="author" aria-describedby="author" required>
+                </div>
+                <div class="mb-3">
+                    <label for="genere" class="form-label">Genere</label>
+                    <input type="text" class="form-control" id="genere" name="genere" aria-describedby="genere" required>
+                </div>
+                <div class="mb-3">
+                    <label for="release" class="form-label">Release Date</label>
+                    <input type="date" class="form-control" id="release" name="release" aria-describedby="release-date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="img" class="form-label">Image Name</label>
+                    <input type="text" class="form-control" id="img" name="img" aria-describedby="cover-image" required>
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+    <div class="row">
+        
+    </div>
+</div> 
+{% endblock %}

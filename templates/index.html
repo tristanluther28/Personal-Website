@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block title %}Tristan's Workshop{% endblock %}
+{% block auxcss %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="text-center position-text">
+            <h2>
+                <p class="typewrite" data-period="2000" data-type='[ "Starlink Intern @ SpaceX", "Electrical Engineering Student @ Oregon State University", "Open Source Contributer", "Electronics Hobbyist", "Amateur Radio Operator", "Web Developer", "Part 107 Certified Drone Pilot"]'>
+                    <span class="wrap"></span>
+                </p>
+            </h2>
+        </div>
+        <!-- sinc function plot -->
+        <canvas width="533" height="266" id="sinc" style="display: block; box-sizing: border-box; height: 212.8px; width: 426.4px; z-index: 1;"></canvas>
+    </div>
+    {% for category in categories: %}
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-12">
+            <h3>{{category.name}}</h3>
+            <hr>
+        </div>
+    </div>
+    <!-- Project carosel for this group -->
+    <div id="carouselExampleControls{{category._id}}" class="carousel carousel-dark slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+        {% set index = namespace(value=0) %}
+        {% set end_index = namespace(value=0) %}
+        {% for project in projects: %}
+            {% if project.category_id == category._id: %}
+                {% set end_index.value = loop.index0 %}
+            {% endif %}
+        {% endfor %}
+        {% for project in projects: %}
+            {% if project.category_id == category._id: %}
+            {% if index.value == 0: %}
+             <!-- Marks the start of a group of four -->
+             <div class="carousel-item active">
+                <div class="row">
+            {% elif index.value % 4 == 0: %}
+             <!-- Marks the start of a group of four -->
+             <div class="carousel-item">
+                <div class="row">
+                {% endif %}
+                    <!-- Single Item -->
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-6 display-flex py-10">
+                        <div class="project-box m-1">
+                            <a href="/{{category._id}}/{{project._id}}">
+                            <img src="{{url_for('static', filename='img/'+project.cover_img)}}" alt="Picture of {{project.name}}" class="img-fluid">
+                            <h4 class="text-center project-title">{{project.name}}<br><span class=""></h4><p class="text-center"></a><span class="text-muted"><i class="bi bi-clock"></i> {{project.date_made.strftime("%B %d, %Y")}}</span><br>
+                                <a class="read-more" href="/{{category._id}}/{{project._id}}">Read More >></a><span></p>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- End of single item -->
+                {% if index.value % 4 == 3 and loop.index0 != end_index.value: %}
+                </div>
+            </div>
+                {% endif %}
+                {% if loop.index0 == end_index.value: %}
+                </div>
+            </div>
+                {% endif %}
+                {% set index.value = index.value + 1 %}
+            {% endif %}
+        {% endfor %}
+        <!-- End of a group of four -->
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls{{category._id}}" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls{{category._id}}" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    {% endfor %}
+    <!-- End of project carosel -->
+</div> 
+<script src="static/node_modules/chart.js/dist/chart.min.js"></script>
+<script>
+    //Type Text
+    var TxtType = function(el, toRotate, period) {
+        this.toRotate = toRotate;
+        this.el = el;
+        this.loopNum = 0;
+        this.period = parseInt(period, 10) || 2000;
+        this.txt = '';
+        this.tick();
+        this.isDeleting = false;
+    };
+
+    TxtType.prototype.tick = function() {
+        var i = this.loopNum % this.toRotate.length;
+        var fullTxt = this.toRotate[i];
+
+        if (this.isDeleting) {
+        this.txt = fullTxt.substring(0, this.txt.length - 1);
+        } else {
+        this.txt = fullTxt.substring(0, this.txt.length + 1);
+        }
+
+        this.el.innerHTML = '<span class="wrap">'+this.txt+'</span>';
+
+        var that = this;
+        var delta = 200 - Math.random() * 100;
+
+        if (this.isDeleting) { delta /= 2; }
+
+        if (!this.isDeleting && this.txt === fullTxt) {
+        delta = this.period;
+        this.isDeleting = true;
+        } else if (this.isDeleting && this.txt === '') {
+        this.isDeleting = false;
+        this.loopNum++;
+        delta = 500;
+        }
+
+        setTimeout(function() {
+        that.tick();
+        }, delta);
+    };
+
+    window.onload = function() {
+        var elements = document.getElementsByClassName('typewrite');
+        for (var i=0; i<elements.length; i++) {
+            var toRotate = elements[i].getAttribute('data-type');
+            var period = elements[i].getAttribute('data-period');
+            if (toRotate) {
+              new TxtType(elements[i], JSON.parse(toRotate), period);
+            }
+        }
+        // INJECT CSS
+        var css = document.createElement("style");
+        css.type = "text/css";
+        css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #000}";
+        document.body.appendChild(css);
+    };
+    //End Type Text
+
+
+    let canvas = document.getElementById('sinc');
+    const context = document.getElementById('sinc').getContext('2d');
+    var sinc_values = [];
+    let y_first = 0;
+    //Collect sinc function points from -8 to 8 with a resolution of 0.25
+    for(var i = -8; i <= 8; i+=0.05){
+        var y_sinc = (Math.sin(i*Math.PI))/(i*Math.PI);
+        if(isNaN(y_sinc)){
+            y_sinc = 1;
+        }
+        if(i === -8){
+            y_first = y_sinc;
+        }
+        sinc_values.push({x: i, y: y_sinc});
+    }
+
+    //Chart data
+    const data = {
+    datasets: [
+        {
+        data: sinc_values,
+        fill: false,
+        borderColor: '#FF0000',
+        backgroundColor: 'rgba(255, 0, 0, 0.1)',
+        pointRadius: 1,
+        lineTension: 0.9
+        }
+    ]
+    };
+    
+    //Chart animation
+    var delayed;
+    const animation = {
+        onComplete: () => {
+            delayed = true;
+          },
+        delay: (context) => {
+            let delay = 0;
+            if (context.type === 'data' && context.mode === 'default' && !delayed) {
+              delay = context.dataIndex * 10 + context.datasetIndex * 3.3;
+            }
+            return delay;
+          }
+    
+    };
+    //Chart configuration
+    const config = {
+        type: 'line',
+        data: data,
+        options: {
+            responsive: true,
+            animation,
+            interaction: {
+                mode: 'click',
+                intersect: false
+            },
+            plugins: {
+                legend: false,
+                tooltip: { 
+                    enabled: false 
+                },
+                title: {
+                    display: false,
+                    text: 'SINC function'
+                }
+            },
+            scales: {
+                x: {
+                    display: false,
+                    type: 'linear',
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display: false
+                    },
+                    borderWidth: 0
+                },
+                y: {
+                    display: false,
+                    type: 'linear',
+                    grid: {
+                        display: false
+                    },
+                    ticks: {
+                        display: false
+                    }
+                }
+            }
+        },
+      };
+    var chart = new Chart(context, config);
+    
+</script>
+{% endblock %}

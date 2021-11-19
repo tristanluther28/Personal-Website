@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}{{project.name}} | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/product.css')}}">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+{% endblock %}
+{% block content %}
+<!-- Cover Image Background with center title -->
+<header class="project-header background-image-page-header" style="background-image: url({{url_for('static', filename='img/'+project.cover_img)}}) !important;">
+    <div class="container clr page-header-inner">
+        <h1 class="page-header-title clr" itemprop="headline">{{project.name}}</h1>
+    </div>
+    <span class="background-image-page-header-overlay"></span>
+</header>
+<div class="container">
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-12 mt-5">
+            {{content_md}}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Link Hole -->
+        <div class="col-12 mt-2">
+            {% if project.github_link or project.model_link: %}
+            <h5>Project Links</h5>
+            <ul class="nav col-md-4 justify-content-center list-unstyled d-flex">
+                {% if project.github_link: %}
+                <li class="ms-3"><a class="black" href="{{project.github_link}}" target="_blank"><i class="bi-github" style="font-size: 4rem;" role="img" aria-label="GitHub"></i></a></li>
+                {% endif %}
+                {% if project.model_link: %}
+                <li class="ms-3"><a class="black" href="{{project.model_link}}" target="_blank"><i class="bi-badge-3d-fill" style="font-size: 4rem;" role="img" aria-label="Thingiverse"></i></a></li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <!-- Bill of Materials -->
+        <div class="col-12">
+            {% if bom: %}
+            <h5>Bill of Materials</h5>
+            <table class="table table-striped">
+                <thead>
+                    <th>Item #</th>
+                    <th>Item Name</th>
+                    <th></th>
+                    <th>Quantity</th>
+                    <th>Price/Unit</th>
+                    <th>Total</th>
+                </thead>
+                <tbody>
+                <!-- Single BOM Item -->
+                {% for item in bom: %}
+                <tr>
+                    <th scope="row">{{loop.index}}</th>
+                    <td colspan="2">{{item.name}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>${{'{0:.2f}'.format(item.unit_price)}}</td>
+                    <td>${{'{0:.2f}'.format(item.unit_price*item.quantity)}}</td>
+                </tr>
+                {% endfor %}
+                <!-- Table close -->
+                <tr>
+                    <th scope="row"></th>
+                    <td colspan="2"></td>
+                    <td></td>
+                    <th>Grand Total:</th>
+                    <th>${{'{0:.2f}'.format(total)}}</th>
+                </tr>
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Project Last Edited  -->
+        <div class="col-12 mt-2 text-center">
+            <p>Article last edited: {{project.date_edit.strftime("%B %Y")}}</p>
+        </div>
+    </div>
+</div> 
+{% endblock %}

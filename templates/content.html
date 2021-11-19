@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}Website Content | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+<link rel="stylesheet" href="{{url_for('static', filename='css/content.css')}}">
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<!-- Cover Image Background with center title -->
+<div class="container">
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-4">
+            <h4>Projects</h4>
+            <ul class="list-group">
+                {% for project in projects: %}
+                <li class="list-group-item">
+                    <b>{{project.name}}</b>
+                    <p>{{project.content_md[0:80]}}...</p>
+                    <a href="/content/edit/project/{{project._id}}">Edit</a>   
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="/content/add/project"><button class="btn btn-primary">+ Add Project</button></a>
+        </div>
+        <div class="col-4">
+            <h4>Books</h4>
+            <ul class="list-group">
+                {% for book in books %}
+                <li class="list-group-item">
+                    <b>{{book.title}}</b>
+                    <p>{{book.author}} | {{book.release.strftime("%B %d, %Y")}} | {{book.genere}}</p>
+                    <a href="/content/edit/book">Edit</a> 
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="/content/add/book"><button class="btn btn-primary">+ Add Book</button></a>
+        </div>
+        <div class="col-4">
+            <h4>Work Locations</h4>
+            <ul class="list-group">
+                {% for work in works %}
+                <li class="list-group-item">
+                    <b>{{work.title}} @ {{work.location}}</b>
+                    <p>From {{work.start.strftime("%B %Y")}} to {% if work.end: %}{{work.end.strftime("%B %Y")}}{% else: %}Today{% endif %}</p>
+                    <a href="/content/edit/work">Edit</a> 
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="/content/add/work"><button class="btn btn-primary">+ Add Job</button></a>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <!-- Project Group Header -->
+        <div class="col-4">
+            <h4>Project Categories</h4>
+            <ul class="list-group">
+                {% for category in categories: %}
+                <li class="list-group-item">
+                    <b>{{category.name}}</b><br>
+                    <a href="/content/edit/category">Edit</a>   
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="/content/add/category"><button class="btn btn-primary">+ Add Category</button></a>
+        </div>
+        <div class="col-4">
+            <h4>Skills</h4>
+            <ul class="list-group">
+                {% for skill in skills %}
+                <li class="list-group-item">
+                    <b>{{skill.skill_name}}</b>
+                    <p>Confidence: {{skill.confidence_lvl}}%</p>
+                    <a href="/content/edit/skill">Edit</a> 
+                </li>
+                {% endfor %}
+            </ul>
+            <a href="/content/add/skill"><button class="btn btn-primary">+ Add Skill</button></a>
+        </div>
+        <div class="col-4">
+            <h4>BOM Items</h4>
+            <a href="/content/add/bom-item"><button class="btn btn-primary">+ Add BOM Item</button></a>
+        </div>
+    </div>
+</div> 
+{% endblock %}

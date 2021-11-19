@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}Add a Job | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<!-- Cover Image Background with center title -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% if msg and not msg == "": %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi flex-shrink-0 me-2 bi-check-circle-fill" width="24" height="24" role="img" aria-label="Success:"></i>
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-8">
+            <h3>Add Job</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" aria-describedby="title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" id="location" name="location" aria-describedby="location" required>
+                </div>
+                <div class="mb-3">
+                    <label for="lat" class="form-label">Latitude</label>
+                    <input type="text" class="form-control" id="lat" name="lat" aria-describedby="lat" required>
+                </div>
+                <div class="mb-3">
+                    <label for="long" class="form-label">Longitude</label>
+                    <input type="text" class="form-control" id="long" name="long" aria-describedby="long" required>
+                </div>
+                <div class="mb-3">
+                    <label for="start" class="form-label">Start Date</label>
+                    <input type="date" class="form-control" id="start" name="start" aria-describedby="start-date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="end" class="form-label">End Date (Leave blank if current job)</label>
+                    <input type="date" class="form-control" id="end" name="end" aria-describedby="end-date">
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+    <div class="row">
+        
+    </div>
+</div> 
+{% endblock %}

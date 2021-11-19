@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{#
+    Get the content for a project based on the passed ID 
+    @param id
+#}
+{% block title %}Add a Skill | Tristan's Workshop{% endblock %}
+{% block auxcss %}
+{% endblock %}
+{% block content %}
+<nav class="navbar navbar-light bg-grey-900">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1"></span>
+    </div>
+</nav>
+<!-- Cover Image Background with center title -->
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            {% if msg and not msg == "": %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi flex-shrink-0 me-2 bi-check-circle-fill" width="24" height="24" role="img" aria-label="Success:"></i>
+                {{msg}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">
+        <!-- Project Group Header -->
+        <div class="col-8">
+            <h3>Add Skill</h3>
+            <form method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Skill Name</label>
+                    <input type="text" class="form-control" id="name" name="name" aria-describedby="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="confidence" class="form-label">Confidence Level</label>
+                    <input type="number" class="form-control" id="confidence" name="confidence" aria-describedby="confidence" required>
+                </div>
+                <div class="mb-3">
+                    <label for="type" class="form-label">Skill Type</label>
+                    <select class="form-select" name="type" aria-label="type">
+                        <option value="hw">Hardware Tools</option>
+                        <option value="sw">Software Tools</option>
+                        <option value="lang">Languages & Frameworks</option>
+                      </select>
+                </div>
+                <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <div class="col-4">
+            
+        </div>
+    </div>
+    <div class="row">
+        
+    </div>
+</div> 
+{% endblock %}
